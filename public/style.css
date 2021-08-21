@@ -1,0 +1,234 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Titillium Web', sans-serif;
+  font-weight: 600;
+  /*font-size: 16px;*/
+  line-height: 1.7;
+  color: #777;
+}
+
+.top {
+  position: absolute;
+  width: 100vw;
+  top: 0;
+}
+
+.top_container {
+  position: relative;
+  margin: auto;
+}
+
+.top_container2 {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.logo {
+  display: inline-block;
+  padding: 1rem;
+}
+
+.tel {
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 3rem;
+  padding-left: 2rem;
+  color: white;
+}
+
+.topnav {
+  position: relative;
+  float: right;
+  margin: 2rem;
+  height: 4rem;
+  background-color: #333;
+  overflow: hidden;
+}
+
+.topnav a {
+  color: #f2f2f2;
+  height: 58px;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 2rem;
+}
+
+.topnav a:hover {
+  background-color: #cc3333;
+  color: white;
+}
+
+.text_container {
+  display: inline-block;
+  position: relative;
+  min-width: 45rem;
+  margin: 0rem auto 0 auto;
+  padding: 2rem;
+}
+
+.title {
+  display: inline-block;
+  position: relative;
+  margin: 0rem auto 0 auto;
+  font-size: 2rem;
+  color: #cc3333;
+}
+
+.text {
+  margin: 0rem auto 0 auto;
+  max-width: 1200px;
+  font-size: 2rem;
+  color: white;
+}
+
+.bg {
+  height: 95vh;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(7, 7, 7, 0.9),
+      rgba(7, 7, 7, 0.9)
+    ),
+    url(img/letterbg.jpg);
+  background-size: cover;
+  background-position: top;
+  position: relative;
+
+  clip-path: polygon(0 0, 100% 0, 100% 80vh, 0 100%);
+}
+
+/* 
+------------------------------------------------------------
+New client form
+*/
+
+.form {
+  white-space: nowrap;
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  font-size: 1.8rem;
+}
+
+button {
+  float: right;
+}
+
+#name {
+  width: 14rem;
+}
+
+#address {
+  width: 20rem;
+}
+
+#postcode {
+  width: 10rem;
+}
+
+/* 
+------------------------------------------------------------
+Table
+*/
+
+.round {
+  margin: 1rem;
+  font-size: 1.5rem;
+}
+
+button {
+  border-radius: 25px;
+  border: 2px solid #333;
+  float: right;
+  background-color: #333;
+  color: white;
+  padding: 0.5rem;
+}
+
+button:hover {
+  background-color: #cc3333;
+  border: 2px solid #cc3333;
+  color: white;
+}
+
+.btn_cancel {
+  border-radius: 25px;
+  border: 2px solid #333;
+  float: right;
+  background-color: #333;
+  color: white;
+  padding: 0.5rem;
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.4rem;
+}
+
+.btn_cancel:hover {
+  background-color: #cc3333;
+  border: 2px solid #cc3333;
+  color: white;
+  text-decoration: none;
+}
+
+caption {
+  position: relative;
+  margin: 0rem auto 0 auto;
+  font-size: 2rem;
+  color: #cc3333;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+table {
+  min-width: 100rem;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 0.5rem;
+  text-align: left;
+}
+
+#t01 th {
+  color: white;
+  background-color: #333;
+}
+
+/* top-left border-radius */
+table tr:first-child th:first-child {
+  border-top-left-radius: 1rem;
+}
+
+/* top-right border-radius */
+table tr:first-child th:last-child {
+  border-top-right-radius: 1rem;
+}
+
+/* bottom-left border-radius */
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+
+/* bottom-right border-radius */
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
+}
+
+#t01 tr:nth-child(even) {
+  background-color: rgba(44, 40, 40, 0.2);
+}
+#t01 tr:nth-child(odd) {
+  background-color: rgba(44, 40, 40, 0.4);
+}
