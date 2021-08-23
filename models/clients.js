@@ -10,17 +10,17 @@ const clientSchema = new Schema(
     name: {
       type: String,
       required: true,
-      maxLength: 75,
+      maxLength: 1000,
     },
     address: {
       type: String,
       required: true,
-      maxLength: 75,
+      maxLength: 1000,
     },
     postCode: {
       type: String,
       required: true,
-      maxLength: 10,
+      maxLength: 1000,
     },
   },
   { timestamps: true }

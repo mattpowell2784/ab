@@ -3,10 +3,11 @@ let recordCount;
 //fetch client data
 getClients = async function () {
   try {
-    let clients = await fetch('./all-clients');
-    let clientsList = await clients.json();
-    recordCount = clientsList.length;
-    renderData(clientsList);
+    let getAddressData = await fetch('/all-clients');
+    addressData = await getAddressData.json();
+    console.log(addressData);
+    recordCount = addressData.results;
+    renderData(addressData.data);
   } catch (error) {
     console.log(error);
   }
@@ -14,11 +15,11 @@ getClients = async function () {
 getClients();
 
 //render clients data
-function renderData(clientsList) {
+function renderData(addressData) {
   let div = document.querySelector('.customers');
-  console.log(clientsList);
+  console.log(addressData);
   let i = 0;
-  clientsList.forEach(e => {
+  addressData.data.forEach(e => {
     i = i + 1;
     let html = `
     <span id="${e._id}">
@@ -47,7 +48,6 @@ btnAddClient.addEventListener('click', function () {
 
 //render new client form
 function renderNewClientForm() {
-  console.log('test');
   let div = btnAddClient;
   //document.querySelector('.text_container');
   let html = `
@@ -148,7 +148,6 @@ document.addEventListener('click', function (e) {
 //---------------------------------------------------------------------
 
 //remove buttons to ensure integirty of data entry
-
 function removeButtons(extraEntry) {
   for (let i = 0; i < recordCount - 1 + extraEntry; i++) {
     let editButton = document.getElementById('edit_button');
