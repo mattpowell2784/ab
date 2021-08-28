@@ -214,7 +214,7 @@ function removeButtons() {
 
 //---------------------------------------------------------------------
 
-//serach function
+//search by name function
 document.addEventListener('click', async function (e) {
   if (e.target.className == 'search_btn') {
     e.preventDefault();
@@ -224,23 +224,30 @@ document.addEventListener('click', async function (e) {
       let searchString = searchBox[0].value;
       console.log(searchString);
 
-      // const data = JSON.stringify({
-      //   name: searchString,
-      // });
-
-      // console.log(data);
-
-      // const myInit = {
-      //   headers: { 'Content-Type': 'application/json' },
-      //   method: 'GET',
-      // };
+      removeAllDataFromDom();
 
       let searchClients = await fetch(`/search-clients?name=${searchString}`);
       let searchClientsResponse = await searchClients.json();
       console.log(searchClientsResponse);
-      if ((searchClientsResponse.status = 'success')) {
-        //window.location.reload();
+      if (searchClientsResponse.status == 'success') {
+        renderData(searchClientsResponse.data);
       }
     } catch (err) {}
   }
 });
+
+//remove all data
+async function removeAllDataFromDom() {
+  try {
+    let getAddressData = await fetch('/all-clients');
+    let addressData = await getAddressData.json();
+    let recordCount = addressData.results;
+    console.log(recordCount);
+    console.log(addressData.data.data);
+
+    addressData.data.data.forEach(e => {
+      let tableRow = document.getElementsByClassName(e._id);
+      tableRow[0].remove();
+    });
+  } catch (err) {}
+}
