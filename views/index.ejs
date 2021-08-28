@@ -29,29 +29,38 @@
           <div class="text_container">
             <div class="text">
               <div class="title">
-                <h2 id="new_form">Address Book</h2>
+                <h2>Address Book</h2>
 
-                <form class="table_form">
-                  <table style="width: 100%" id="t01">
-                    <caption>
+                <!-- <form class="search_form" action="/search-clients" method="get"> -->
+                <input
+                  class="search_box"
+                  type="text"
+                  id="main__search_box"
+                  name="name"
+                />
+                <button id="main__search_btn" class="search_btn">Search</button>
+                <!-- </form> -->
+
+                <table style="width: 100%" id="t01">
+                  <caption>
+                    <div class="div"></div>
+                    <div class="div">
                       <button id="btn_add_client">Add Address</button>
-                    </caption>
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Address</th>
-                        <th>Postcode</th>
-                        <th></th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody id="table_top" class="customers">
-                      <div></div>
-
-                      <% %>
-                    </tbody>
-                  </table>
-                </form>
+                    </div>
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Address</th>
+                      <th>Postcode</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="table_top" class="customers">
+                    <div></div>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

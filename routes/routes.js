@@ -5,9 +5,11 @@ const router = express.Router();
 
 router.get('/all-clients', addController.displayClients);
 
+router.get('/search-clients', addController.searchClients);
+
 router.post('/add-client', addController.addClient);
 
-router.post('/patch/:id', addController.editClient);
+router.patch('/patch/:id', addController.updateClient);
 
 router.delete('/delete/:id', addController.deleteClient);
 

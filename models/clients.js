@@ -20,7 +20,7 @@ const clientSchema = new Schema(
     postCode: {
       type: String,
       required: true,
-      maxLength: 1000,
+      maxLength: 100,
     },
   },
   { timestamps: true }

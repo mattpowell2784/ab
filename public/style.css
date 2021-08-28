@@ -155,13 +155,19 @@ button {
   padding: 0.5rem;
 }
 
+.search_box {
+  float: right;
+  padding: 0.5rem;
+}
+
 button:hover {
   background-color: #cc3333;
   border: 2px solid #cc3333;
   color: white;
 }
 
-.btn_cancel {
+.new_client_form__btn_cancel,
+.edit_client_form__btn_cancel {
   border-radius: 25px;
   border: 2px solid #333;
   float: right;

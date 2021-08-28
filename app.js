@@ -3,7 +3,13 @@ const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const routes = require('./routes/routes.js');
+const dotenv = require('dotenv');
 
+//read config.env file
+dotenv.config({ path: './config.env' });
+//console.log(process.env);
+
+//initailise express
 let app = express();
 
 //use view engine
@@ -11,7 +17,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // For reading HTML data
-app.use(express.urlencoded({ extended: false }));
+//app.use(express.urlencoded({ extended: false }));
 
 // For accessing external files
 app.use(express.static('public'));
@@ -25,21 +31,24 @@ app.use(morgan('dev'));
 //---------------------------------------------------------------------
 
 // Open server and connect database
-let db;
-let port = process.env.PORT;
-if (port == null || port == '') {
-  port = 3000;
-}
-
-let dbURI =
-  'mongodb+srv://mattpowell2784:spazmati1Z@cluster0.se05l.mongodb.net/maxVolts?retryWrites=true&w=majority';
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
 
 mongoose
-  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => app.listen(port))
-  .catch(err => {
-    console.log(err);
-  });
+  .connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('DB connection successful!'));
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});
 
 //---------------------------------------------------------------------
 

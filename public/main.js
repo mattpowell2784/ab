@@ -1,11 +1,8 @@
-let recordCount;
-
 //fetch client data
 getClients = async function () {
   try {
     let getAddressData = await fetch('/all-clients');
     addressData = await getAddressData.json();
-    console.log(addressData);
     recordCount = addressData.results;
     renderData(addressData.data);
   } catch (error) {
@@ -16,30 +13,27 @@ getClients();
 
 //render clients data
 function renderData(addressData) {
-  let div = document.querySelector('.customers');
-  console.log(addressData);
-  let i = 0;
+  let addressDisplayTable = document.querySelector('.customers');
+
   addressData.data.forEach(e => {
-    i = i + 1;
     let html = `
     <span id="${e._id}">
       <tr class="${e._id}">
-        <td class="${e._id}_name">${e.name}</td>
-        <td class="${e._id}_address">${e.address}</td>
-        <td class="${e._id}_postCode">${e.postCode}</td>
-        <td><button id="edit_button" class="${e._id}">Edit</button></td>
-        <td><button id="delete_button" class="${e._id}">Delete</button></td>      
+        <td class="name_${e._id}">${e.name}</td>
+        <td class="address_${e._id}_address">${e.address}</td>
+        <td class="postCode_${e._id}">${e.postCode}</td>
+        <td><button id="edit_button_${e._id}" class="edit_btn__active">Edit</button></td>
+        <td><button id="delete_button_${e._id}" class="delete_btn__active">Delete</button></td>      
       </tr>
       </span>`;
 
-    div.insertAdjacentHTML('beforeend', html);
-    //return html;
+    addressDisplayTable.insertAdjacentHTML('beforeend', html);
   });
 }
 
 //---------------------------------------------------------------------
 
-//new client button event listener
+//add new client event listener
 const btnAddClient = document.getElementById('btn_add_client');
 btnAddClient.addEventListener('click', function () {
   renderNewClientForm();
@@ -48,51 +42,81 @@ btnAddClient.addEventListener('click', function () {
 
 //render new client form
 function renderNewClientForm() {
-  let div = btnAddClient;
-  //document.querySelector('.text_container');
-  let html = `
-  <form class="form" action="/add-client" method="post">
-    
-      <td><input type="text" id="name" name="name" /></td>
-      <td><input type="text" id="address" name="address"/></td>
-      <td><input type="text" id="postcode" name="postCode"/></td>
-      <td><a class="btn_cancel" href="/">Cancel</a></td>
-      <td><button>Submit</button></td>
-    
-  </form>`;
+  let html = ` 
+      <div class="new_client_form">
+      <td><input type="text" class="new_client_form__name" /></td>
+      <td><input type="text" class="new_client_form__address" /></td>
+      <td><input type="text" class="new_client_form__postcode" /></td>
+      <td><a class="new_client_form__btn_cancel" href="/">Cancel</a></td>
+      <td><button class="new_client_form__btn_submit">Submit</button></td>
+      </div>
+    `;
 
-  //let newForm = document.getElementById('new_form');
   let newForm = document.getElementById('table_top');
-  console.log(newForm);
   newForm.insertAdjacentHTML('afterbegin', html);
 
-  let formHtmlElement = document.querySelector('.table_form');
-  formHtmlElement.action = `/add-client`;
-  formHtmlElement.method = 'post';
+  removeButtons();
+  addNewClient();
+}
 
-  removeButtons(1);
+//add new client
+function addNewClient() {
+  //get input elements
+  let newClientForm = {
+    name: document.getElementsByClassName('new_client_form__name'),
+    address: document.getElementsByClassName('new_client_form__address'),
+    postCode: document.getElementsByClassName('new_client_form__postcode'),
+    submitBtn: document.getElementsByClassName('new_client_form__btn_submit'),
+  };
+
+  //submit form data
+  newClientForm.submitBtn[0].addEventListener('click', async function () {
+    try {
+      const data = JSON.stringify({
+        name: newClientForm.name[0].value,
+        address: newClientForm.address[0].value,
+        postCode: newClientForm.postCode[0].value,
+      });
+
+      const myInit = {
+        headers: { 'Content-Type': 'application/json' },
+        body: data,
+        method: 'POST',
+      };
+
+      let newClient = await fetch('/add-client', myInit);
+      let newClientResponse = await newClient.json();
+      console.log(newClientResponse);
+      if ((newClientResponse.status = 'success')) {
+        window.location.reload();
+      }
+    } catch (err) {}
+  });
 }
 
 //---------------------------------------------------------------------
 
 //delete record
-document.addEventListener('click', function (e) {
-  if (e.target.id === 'delete_button') {
+document.addEventListener('click', async function (e) {
+  //get table row using object id
+  let regEx = /delete_button_.*/;
+  if (e.target.id.match(regEx)) {
+    recordId = e.target.id.slice(14);
     e.preventDefault();
 
-    //select row
-    recordId = e.target.className;
-    const endpoint = `/delete/${recordId}`;
-    console.log(endpoint);
+    //delete data from database
+    try {
+      let deleteClientResponse = await fetch(`/delete/${recordId}`, {
+        method: 'DELETE',
+      });
 
-    //remove dom elements
-    let rowName = document.getElementsByClassName(recordId);
-    console.log(rowName);
-    rowName[0].remove();
-
-    fetch(endpoint, {
-      method: 'DELETE',
-    }).then(console.log('deleted'));
+      //remove dom elements
+      if (deleteClientResponse.ok == true) {
+        console.log(deleteClientResponse);
+        let tableRow = document.getElementsByClassName(recordId);
+        tableRow[0].remove();
+      }
+    } catch (err) {}
   }
 });
 
@@ -100,62 +124,123 @@ document.addEventListener('click', function (e) {
 
 //edit record
 document.addEventListener('click', function (e) {
-  if (e.target.id === 'edit_button') {
-    //select row
-    recordId = e.target.className;
-    let spanName = document.getElementById(recordId);
-    console.log(spanName);
-    console.log(spanName.nextSibling);
-
-    //store current data
-    let name = spanName.nextSibling.childNodes[1].textContent;
-    let address = spanName.nextSibling.childNodes[3].textContent;
-    let postCode = spanName.nextSibling.childNodes[5].textContent;
-
-    console.log(name);
-
-    //remove dom elements
-    let rowName = document.getElementsByClassName(recordId);
-    let btn = document.getElementsByClassName('btn' + recordId);
-    let newForm = document.getElementById('table_top');
-    console.log(rowName);
-    rowName[0].remove();
-    //btn[0].remove();
-
-    //add form elements
-    let html = `
-      
-    <form class="form" action="/patch/${recordId}" method="post">
-    
-    <td><input type="text" id="name${recordId}" name="name" value="${name}" /></td>
-    <td><input type="text" id="address" name="address" value="${address}" /></td>
-    <td><input type="text" id="postcode" name="postCode" value="${postCode}" /></td>
-    <td><a class="btn_cancel" href="/">Cancel</a></td>
-    <td><button>Submit</button></td>
-  
-    </form>`;
-
-    spanName.insertAdjacentHTML('afterend', html);
-
-    let formHtmlElement = document.querySelector('.table_form');
-    formHtmlElement.action = `/patch/${recordId}`;
-    formHtmlElement.method = 'post';
-
-    removeButtons(0);
+  let regEx = /edit_button.*/;
+  if (e.target.id.match(regEx)) {
+    recordId = e.target.id.slice(12);
+    renderEditClientForm(recordId);
   }
 });
+
+//render edit client form
+function renderEditClientForm(recordId) {
+  //get table using object id
+  let tableRow = document.getElementsByClassName(recordId);
+
+  //store current data
+  let currentData = {
+    name: tableRow[0].childNodes[1].textContent,
+    address: tableRow[0].childNodes[3].textContent,
+    postCode: tableRow[0].childNodes[5].textContent,
+  };
+
+  //remove dom elements
+  tableRow[0].remove();
+
+  //add form elements
+  let html = `
+  <td><input type="text" class="edit_client_form__name" value="${currentData.name}" /></td>
+  <td><input type="text" class="edit_client_form__address" value="${currentData.address}" /></td>
+  <td><input type="text" class="edit_client_form__postcode" value="${currentData.postCode}" /></td>
+  <td><a class="edit_client_form__btn_cancel" href="/">Cancel</a></td>
+  <td><button class="edit_client_form__btn_submit">Submit</button></td>`;
+
+  let editForm = document.getElementById(recordId);
+  editForm.insertAdjacentHTML('afterend', html);
+
+  removeButtons();
+
+  updateRecord(recordId);
+}
+
+//update record information
+function updateRecord(recordId) {
+  //get input elements
+  let editClientForm = {
+    name: document.getElementsByClassName('edit_client_form__name'),
+    address: document.getElementsByClassName('edit_client_form__address'),
+    postCode: document.getElementsByClassName('edit_client_form__postcode'),
+    submitBtn: document.getElementsByClassName('edit_client_form__btn_submit'),
+  };
+
+  //submit form data
+  editClientForm.submitBtn[0].addEventListener('click', async function () {
+    try {
+      const data = JSON.stringify({
+        name: editClientForm.name[0].value,
+        address: editClientForm.address[0].value,
+        postCode: editClientForm.postCode[0].value,
+      });
+
+      const myInit = {
+        headers: { 'Content-Type': 'application/json' },
+        body: data,
+        method: 'PATCH',
+      };
+
+      let updatwClient = await fetch(`/patch/${recordId}`, myInit);
+      let updateClientResponse = await updatwClient.json();
+      console.log(updateClientResponse);
+      if ((updateClientResponse.status = 'success')) {
+        window.location.reload();
+      }
+    } catch (err) {}
+  });
+}
 
 //---------------------------------------------------------------------
 
 //remove buttons to ensure integirty of data entry
-function removeButtons(extraEntry) {
-  for (let i = 0; i < recordCount - 1 + extraEntry; i++) {
-    let editButton = document.getElementById('edit_button');
-    editButton.remove();
+function removeButtons() {
+  let editButton = document.getElementsByClassName('edit_btn__active');
+  while (editButton.length > 0) {
+    editButton[0].remove();
   }
-  for (let i = 0; i < recordCount - 1 + extraEntry; i++) {
-    let deleteButton = document.getElementById('delete_button');
-    deleteButton.remove();
+
+  let deleteButton = document.getElementsByClassName('delete_btn__active');
+  while (deleteButton.length > 0) {
+    deleteButton[0].remove();
   }
-  btnAddClient.remove();
 }
+
+//---------------------------------------------------------------------
+
+//serach function
+document.addEventListener('click', async function (e) {
+  if (e.target.className == 'search_btn') {
+    e.preventDefault();
+
+    try {
+      let searchBox = document.getElementsByClassName('search_box');
+      let searchString = searchBox[0].value;
+      console.log(searchString);
+
+      // const data = JSON.stringify({
+      //   name: searchString,
+      // });
+
+      // console.log(data);
+
+      // const myInit = {
+      //   headers: { 'Content-Type': 'application/json' },
+      //   method: 'GET',
+      // };
+
+      let searchClients = await fetch(`/search-clients?name=${searchString}`);
+      let searchClientsResponse = await searchClients.json();
+      console.log(searchClientsResponse);
+      if ((searchClientsResponse.status = 'success')) {
+        //window.location.reload();
+      }
+    } catch (err) {}
+  }
+});
