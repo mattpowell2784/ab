@@ -31,24 +31,27 @@
               <div class="title">
                 <h2>Address Book</h2>
 
-                <!-- <form class="search_form" action="/search-clients" method="get"> -->
-                <input
-                  class="search_box"
-                  type="text"
-                  id="main__search_box"
-                  name="name"
-                />
-                <button id="main__search_btn" class="search_btn">
-                  Search by Name (full text search)
-                </button>
-                <!-- </form> -->
+                <div class="search_container">
+                  <input
+                    class="search_box"
+                    type="text"
+                    id="main__search_box"
+                    name="name"
+                  />
+
+                  <button id="main__search_btn" class="search_btn">
+                    Search by Name (full text search)
+                  </button>
+
+                  <button id="btn_add_client" class="btn_add_cleint">
+                    Add Address
+                  </button>
+                </div>
 
                 <table style="width: 100%" id="t01">
                   <caption>
                     <div class="div"></div>
-                    <div class="div">
-                      <button id="btn_add_client">Add Address</button>
-                    </div>
+                    <div class="div"></div>
                   </caption>
                   <thead>
                     <tr>

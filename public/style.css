@@ -149,7 +149,6 @@ Table
 button {
   border-radius: 25px;
   border: 2px solid #333;
-  float: right;
   background-color: #333;
   color: white;
   padding: 0.5rem;
@@ -158,6 +157,16 @@ button {
 .search_box {
   float: right;
   padding: 0.5rem;
+  width: 25rem;
+}
+
+.search_btn {
+  float: right;
+  padding: 0.5rem;
+}
+
+.btn_add_cleint {
+  float: left;
 }
 
 button:hover {
