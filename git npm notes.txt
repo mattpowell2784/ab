@@ -29,7 +29,7 @@ git init (makes a git file to send)
 .gitignore (to ignore node_modules and other files)
 git add -A (add files to git)
 git commit -m 'anyname'
-herolu git:remote -a NAME_OF_APPLICATION
+heroku git:remote -a NAME_OF_APPLICATION
 git push heroku master
 git pust origin master
 

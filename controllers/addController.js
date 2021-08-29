@@ -3,7 +3,31 @@ const ClientsModel = require('../models/clients');
 //display clients
 displayClients = async (req, res) => {
   try {
-    let data = await ClientsModel.find();
+    //build query
+    const queryObj = { ...req.query };
+    const exlcudedFields = ['page', 'sort', 'limit', 'fields'];
+    exlcudedFields.forEach(el => delete queryObj[el]);
+
+    //sorting
+    let queryStr = JSON.stringify(queryObj);
+    console.log(JSON.parse(queryStr));
+    let query = ClientsModel.find(JSON.parse(queryStr));
+    if (req.query.sort) {
+      query = query.sort(req.query.sort);
+    }
+
+    //limiting (limits fields returned)
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    }
+
+    //pagination page/limit(number of results)
+    const limit = req.query.limit * 1; //multiply by 1 to convert string to number
+    query = query.limit(100);
+
+    //execute query
+    let data = await query;
     res.status(200).json({
       status: 'success',
       results: data.length,
@@ -17,13 +41,6 @@ displayClients = async (req, res) => {
 //search clients
 const searchClients = async (req, res) => {
   try {
-    // aggregate().search({
-    //   text: {
-    //     query: 'baseball',
-    //     path: 'plot',
-    //   },
-    // });
-
     const queryObj = { ...req.query };
     console.log(req.query, req.body, req.searchString);
 
@@ -48,12 +65,6 @@ const addClient = async (req, res) => {
       status: 'success',
       data: newAddress,
     });
-
-    // console.log(req.body, req.query);
-    // const newEntry = await new ClientsModel(req.body);
-    // await newEntry.save(newEntry, () => {
-    //   res.redirect('/');
-    // });
   } catch (err) {
     console.log(res.ValidatorError);
     console.log(err);

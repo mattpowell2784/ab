@@ -10,6 +10,10 @@
       href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
 
     <link rel="stylesheet" href="style.css" />
     <script defer src="/main.js"></script>
@@ -32,20 +36,24 @@
                 <h2>Address Book</h2>
 
                 <div class="search_container">
+                  <button id="btn_add_client" class="btn_add_client">
+                    Add Address
+                  </button>
+
+                  <button id="btn_show_all" class="btn_show_all">
+                    Load All Data
+                  </button>
+
+                  <button id="main__search_btn" class="search_btn">
+                    Search by Name (full text search)
+                  </button>
+
                   <input
                     class="search_box"
                     type="text"
                     id="main__search_box"
                     name="name"
                   />
-
-                  <button id="main__search_btn" class="search_btn">
-                    Search by Name (full text search)
-                  </button>
-
-                  <button id="btn_add_client" class="btn_add_cleint">
-                    Add Address
-                  </button>
                 </div>
 
                 <table style="width: 100%" id="t01">
@@ -55,7 +63,15 @@
                   </caption>
                   <thead>
                     <tr>
-                      <th>Name</th>
+                      <th>
+                        Name&nbsp;&nbsp;
+                        <span id="material_icons_north" class="material-icons"
+                          >north</span
+                        >
+                        <span id="material_icons_south" class="material-icons"
+                          >south</span
+                        >
+                      </th>
                       <th>Address</th>
                       <th>Postcode</th>
                       <th></th>

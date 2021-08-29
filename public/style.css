@@ -124,15 +124,17 @@ button {
   float: right;
 }
 
-#name {
-  width: 14rem;
-}
-
-#address {
+.edit_client_form__name,
+.new_client_form__name {
   width: 20rem;
 }
+.edit_client_form__address,
+.new_client_form__address {
+  width: 30rem;
+}
 
-#postcode {
+.edit_client_form__postcode,
+.new_client_form__postcode {
   width: 10rem;
 }
 
@@ -152,6 +154,15 @@ button {
   background-color: #333;
   color: white;
   padding: 0.5rem;
+  margin: 0.3rem;
+}
+
+input {
+  border-radius: 10px;
+  border: 2px solid #333;
+  background-color: white;
+  padding: 0.5rem;
+  margin: 0.3rem;
 }
 
 .search_box {
@@ -163,9 +174,18 @@ button {
 .search_btn {
   float: right;
   padding: 0.5rem;
+  height: 16px;
 }
 
-.btn_add_cleint {
+#material_icons_search {
+  position: relative;
+  font-size: 3rem;
+  padding-right: 0rem;
+  bottom: 6px;
+}
+
+.btn_add_client,
+.btn_show_all {
   float: left;
 }
 
