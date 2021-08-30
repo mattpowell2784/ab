@@ -73,7 +73,7 @@ body {
   position: relative;
   min-width: 45rem;
   margin: 0rem auto 0 auto;
-  padding: 2rem;
+  padding: 1rem 4rem 0rem 4rem;
 }
 
 .title {
@@ -92,7 +92,7 @@ body {
 }
 
 .bg {
-  height: 95vh;
+  height: 99vh;
   background-image: linear-gradient(
       to right bottom,
       rgba(7, 7, 7, 0.9),
@@ -103,7 +103,7 @@ body {
   background-position: top;
   position: relative;
 
-  clip-path: polygon(0 0, 100% 0, 100% 80vh, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 85vh, 0 100%);
 }
 
 /* 
@@ -185,7 +185,9 @@ input {
 }
 
 .btn_add_client,
-.btn_show_all {
+.btn_show_all,
+.btn_next_page,
+.btn_prev_page {
   float: left;
 }
 

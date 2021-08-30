@@ -1,5 +1,18 @@
 const ClientsModel = require('../models/clients');
 
+//get all clients
+getAllCleints = async (req, res) => {
+  let query = ClientsModel.find();
+
+  //execute query
+  let data = await query;
+  res.status(200).json({
+    status: 'success',
+    results: data.length,
+    data: { data },
+  });
+};
+
 //display clients
 displayClients = async (req, res) => {
   try {
@@ -23,14 +36,26 @@ displayClients = async (req, res) => {
     }
 
     //pagination page/limit(number of results)
-    const limit = req.query.limit * 1; //multiply by 1 to convert string to number
-    query = query.limit(100);
+    const page = req.query.page * 1 || 1;
+    console.log('page', page);
+    const limit = req.query.limit * 1 || 8; //multiply by 1 to convert string to number
+    console.log('limit', limit);
+    let skip;
+    if (page === 1) {
+      skip = 0;
+    } else {
+      skip = (page - 1) * limit;
+    }
+    console.log('skip', skip);
+
+    query = query.skip(skip).limit(limit);
 
     //execute query
     let data = await query;
     res.status(200).json({
       status: 'success',
       results: data.length,
+      page: page,
       data: { data },
     });
   } catch (err) {
@@ -107,6 +132,7 @@ const deleteClient = async (req, res) => {
 };
 
 module.exports = {
+  getAllCleints,
   displayClients,
   searchClients,
   addClient,

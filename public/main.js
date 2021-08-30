@@ -1,19 +1,52 @@
+let currentPage;
+let currentSort;
+let currentResults;
+
+//---------------------------------------------------------------------
+
 //fetch client data
-getClients = async function (fetchRoute) {
+getClients = async function (fetchRoute, sort) {
   try {
+    console.log('fetch route', fetchRoute);
+
     let getAddressData = await fetch(fetchRoute);
     addressData = await getAddressData.json();
-    recordCount = addressData.results;
-    renderData(addressData.data);
+
+    currentResults = fetchRoute;
+    currentPage = addressData.page;
+    currentSort = sort;
+
+    console.log('current page', currentPage);
+    console.log('current sort', currentSort);
+    console.log('current results', currentResults);
+    console.log(addressData);
+
+    renderData(addressData.data, sort);
   } catch (error) {
     console.log(error);
   }
 };
-getClients('/all-clients?sort=name');
+getClients('/get-clients?', 'sort=name');
+
+//---------------------------------------------------------------------
 
 //render clients data
-function renderData(addressData) {
+function renderData(addressData, sort) {
+  removeAllDataFromDom();
+
   let addressDisplayTable = document.querySelector('.customers');
+
+  console.log(sort);
+
+  if (sort == 'sort=name') {
+    sortBy = 'beforeend';
+  }
+  if (sort == 'sort=-name') {
+    sortBy = 'afterbegin';
+  }
+
+  console.log(sortBy);
+  console.log('-------------');
 
   addressData.data.forEach(e => {
     let html = `
@@ -27,7 +60,7 @@ function renderData(addressData) {
       </tr>
       </span>`;
 
-    addressDisplayTable.insertAdjacentHTML('beforeend', html);
+    addressDisplayTable.insertAdjacentHTML(sortBy, html);
   });
 }
 
@@ -53,6 +86,8 @@ function renderNewClientForm() {
   removeButtons();
   addNewClient();
 }
+
+//---------------------------------------------------------------------
 
 //add new client
 function addNewClient() {
@@ -158,6 +193,8 @@ function renderEditClientForm(recordId) {
   updateRecord(recordId);
 }
 
+//---------------------------------------------------------------------
+
 //update record information
 function updateRecord(recordId) {
   //get input elements
@@ -222,12 +259,26 @@ function removeButtons() {
 
   let searchBox = document.getElementsByClassName('search_box');
   searchBox[0].remove();
+
+  let nextButton = document.getElementsByClassName('btn_next_page');
+  nextButton[0].remove();
+
+  let prevButton = document.getElementsByClassName('btn_prev_page');
+  prevButton[0].remove();
 }
 
 //---------------------------------------------------------------------
 //add buttons
 function addButtons() {
   let buttonsList = [
+    {
+      classname: 'btn_next_page',
+      html: '<button id="btn_next_page" class="btn_next_page">></button>',
+    },
+    {
+      classname: 'btn_prev_page',
+      html: '<button id="btn_prev_page" class="btn_prev_page"><</button>',
+    },
     {
       classname: 'btn_show_all',
       html: '<button id="btn_show_all" class="btn_show_all">Load All Data</button>',
@@ -277,10 +328,10 @@ async function searchByName(e) {
 //event listeners
 function addEventListeners() {
   document.addEventListener('click', function (e) {
-    //show all data event listner
+    //get cleints  data event listner
     if (e.target.id == 'btn_show_all') {
       removeAllDataFromDom();
-      getClients('/all-clients?sort=name');
+      getClients('/get-clients?', 'sort=name');
     }
 
     //add new client event listener
@@ -293,7 +344,7 @@ function addEventListeners() {
       e.preventDefault();
 
       removeAllDataFromDom();
-      getClients('/all-clients?sort=name');
+      getClients(currentResults, 'sort=name');
     }
 
     //sort desceding
@@ -301,7 +352,7 @@ function addEventListeners() {
       e.preventDefault();
 
       removeAllDataFromDom();
-      getClients('/all-clients?sort=-name');
+      getClients(currentResults, 'sort=-name');
     }
 
     //search by name
@@ -325,5 +376,36 @@ function addEventListeners() {
       deleteRecord();
     }
   });
+
+  //next page
+  document.addEventListener('click', function (e) {
+    if (e.target.className == 'btn_next_page') {
+      e.preventDefault();
+      nextPage();
+    }
+  });
+
+  //prev page
+  document.addEventListener('click', function (e) {
+    if (e.target.className == 'btn_prev_page') {
+      e.preventDefault();
+      prevPage();
+    }
+  });
 }
 addEventListeners();
+
+//---------------------------------------------------------------------
+//pagination
+
+async function nextPage() {
+  let nextPage = currentPage + 1;
+  console.log('next page function', nextPage);
+  await getClients(`/get-Clients?page=${nextPage}&limit=8`, currentSort);
+}
+
+async function prevPage() {
+  let prevPage = currentPage - 1;
+  console.log('prev page function', prevPage);
+  await getClients(`/get-Clients?page=${prevPage}&limit=8`, currentSort);
+}

@@ -3,7 +3,9 @@ const addController = require('../controllers/addController');
 
 const router = express.Router();
 
-router.get('/all-clients', addController.displayClients);
+router.get('/all-clients', addController.getAllCleints);
+
+router.get('/get-clients', addController.displayClients);
 
 router.get('/search-clients', addController.searchClients);
 
