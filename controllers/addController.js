@@ -13,6 +13,8 @@ getAllCleints = async (req, res) => {
   });
 };
 
+//---------------------------------------------------------------------
+
 //display clients
 displayClients = async (req, res) => {
   try {
@@ -20,11 +22,15 @@ displayClients = async (req, res) => {
     const queryObj = { ...req.query };
     const exlcudedFields = ['page', 'sort', 'limit', 'fields'];
     exlcudedFields.forEach(el => delete queryObj[el]);
+    console.log(exlcudedFields);
+    console.log(queryObj);
+
+    //advanced filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    let query = ClientsModel.find(JSON.parse(queryStr));
 
     //sorting
-    let queryStr = JSON.stringify(queryObj);
-    console.log(JSON.parse(queryStr));
-    let query = ClientsModel.find(JSON.parse(queryStr));
     if (req.query.sort) {
       query = query.sort(req.query.sort);
     }
@@ -56,12 +62,18 @@ displayClients = async (req, res) => {
       status: 'success',
       results: data.length,
       page: page,
+      sort: req.query.sort,
       data: { data },
     });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
+
+//---------------------------------------------------------------------
 
 //search clients
 const searchClients = async (req, res) => {
@@ -78,9 +90,14 @@ const searchClients = async (req, res) => {
       data: { data },
     });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
+
+//---------------------------------------------------------------------
 
 //add cleint
 const addClient = async (req, res) => {
@@ -91,10 +108,14 @@ const addClient = async (req, res) => {
       data: newAddress,
     });
   } catch (err) {
-    console.log(res.ValidatorError);
-    console.log(err);
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
+
+//---------------------------------------------------------------------
 
 //edit client
 const updateClient = async (req, res) => {
@@ -103,7 +124,7 @@ const updateClient = async (req, res) => {
     const updateAddress = await ClientsModel.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     res.status(200).json({
@@ -113,9 +134,14 @@ const updateClient = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
+
+//---------------------------------------------------------------------
 
 //delete client
 const deleteClient = async (req, res) => {
@@ -127,9 +153,14 @@ const deleteClient = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
+
+//---------------------------------------------------------------------
 
 module.exports = {
   getAllCleints,

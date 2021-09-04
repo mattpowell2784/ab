@@ -50,8 +50,6 @@ app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-
-
 //---------------------------------------------------------------------
 
 //routes
@@ -66,3 +64,11 @@ app.use((req, res) => {
     res.render('404');
   }
 });
+
+// app.all('*', (req, res) => {
+//   console.log(req);
+//   res.status(404).json({
+//     status: 'fail',
+//     message: `Can't find ${req.originalUrl} on this server`,
+//   });
+// });

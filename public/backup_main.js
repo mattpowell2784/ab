@@ -1,42 +1,52 @@
-'use strict';
-
-let currentPage = 1;
-let currentSort = 'name';
-let currentResults = '/get-clients?';
+let currentPage;
+let currentSort;
+let currentResults;
 
 //---------------------------------------------------------------------
 
-async function getClients(fetchRoute) {
+//fetch client data
+getClients = async function (fetchRoute, sort) {
   try {
     console.log('fetch route', fetchRoute);
 
     let getAddressData = await fetch(fetchRoute);
-    let addressData = await getAddressData.json();
+    addressData = await getAddressData.json();
 
     currentResults = fetchRoute;
     currentPage = addressData.page;
-    currentSort = addressData.sort;
+    currentSort = sort;
 
     console.log('current page', currentPage);
     console.log('current sort', currentSort);
     console.log('current results', currentResults);
     console.log(addressData);
-    console.log('------------');
 
-    renderData(addressData.data);
+    renderData(addressData.data, sort);
   } catch (error) {
     console.log(error);
   }
-}
-getClients('/get-clients?sort=name');
+};
+getClients('/get-clients?', 'sort=name');
 
 //---------------------------------------------------------------------
 
 //render clients data
-function renderData(addressData) {
+function renderData(addressData, sort) {
   removeAllDataFromDom();
 
   let addressDisplayTable = document.querySelector('.customers');
+
+  console.log(sort);
+
+  if (sort == 'sort=name') {
+    sortBy = 'beforeend';
+  }
+  if (sort == 'sort=-name') {
+    sortBy = 'afterbegin';
+  }
+
+  console.log(sortBy);
+  console.log('-------------');
 
   addressData.data.forEach(e => {
     let html = `
@@ -50,7 +60,7 @@ function renderData(addressData) {
       </tr>
       </span>`;
 
-    addressDisplayTable.insertAdjacentHTML('beforeend', html);
+    addressDisplayTable.insertAdjacentHTML(sortBy, html);
   });
 }
 
@@ -108,19 +118,13 @@ function addNewClient() {
       let newClientResponse = await newClient.json();
       console.log(newClientResponse);
 
-      if (newClientResponse.status === 'success') {
+      if ((newClientResponse.status = 'success')) {
         //reload data
         removeAllDataFromDom();
         getClients(`/search-clients?_id=${newClientResponse.data._id}`);
         addButtons();
       }
-
-      if (newClientResponse.status === 'fail') {
-        renderInputError(newClientResponse.message);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   });
 }
 
@@ -139,7 +143,7 @@ function removeAllDataFromDom() {
 //---------------------------------------------------------------------
 
 //delete record
-async function deleteRecord(recordId) {
+async function deleteRecord() {
   //delete data from database
   try {
     let deleteClientResponse = await fetch(`/delete/${recordId}`, {
@@ -219,50 +223,15 @@ function updateRecord(recordId) {
       let updatwClient = await fetch(`/patch/${recordId}`, myInit);
       let updateClientResponse = await updatwClient.json();
       console.log(updateClientResponse);
-      if (updateClientResponse.status === 'success') {
+      if ((updateClientResponse.status = 'success')) {
         removeAllDataFromDom();
-        currentPage = 0;
         getClients(
           `/search-clients?_id=${updateClientResponse.data.updateAddress._id}`
         );
         addButtons();
       }
-
-      if (updateClientResponse.status === 'fail') {
-        renderInputError(updateClientResponse.message);
-      }
     } catch (err) {}
   });
-}
-
-//---------------------------------------------------------------------
-
-function removeInputErrors() {
-  let inputErrors = document.getElementsByClassName('new_client_form__error');
-  console.log(inputErrors);
-
-  while (inputErrors.length > 0) {
-    inputErrors[0].remove();
-  }
-}
-
-function renderInputError(errorMessage) {
-  console.log(errorMessage.errors);
-  removeInputErrors();
-
-  let html = '';
-  Object.values(errorMessage.errors).forEach(error => {
-    console.log(error.message);
-
-    html =
-      html +
-      `<tr class="new_client_form__error"><td>${error.message}</td></tr>
-      `;
-  });
-  console.log('----------');
-
-  let newForm = document.getElementById('table_top');
-  newForm.insertAdjacentHTML('beforeend', html);
 }
 
 //---------------------------------------------------------------------
@@ -277,11 +246,6 @@ function removeButtons() {
   let deleteButton = document.getElementsByClassName('delete_btn__active');
   while (deleteButton.length > 0) {
     deleteButton[0].remove();
-  }
-
-  let sortArrows = document.getElementsByClassName('material-icons');
-  while (sortArrows.length > 0) {
-    sortArrows[0].remove();
   }
 
   let addAddressButton = document.getElementsByClassName('btn_add_client');
@@ -333,27 +297,10 @@ function addButtons() {
     },
   ];
 
-  let sortArrows = [
-    {
-      classname: 'material-icons',
-      html: ' <span id="material_icons_south" class="material-icons">south</span>',
-    },
-    {
-      classname: 'material-icons',
-      html: ' <span id="material_icons_north" class="material-icons">north</span>',
-    },
-  ];
-
-  const insertPointButtons =
-    document.getElementsByClassName('search_container');
-  const insertPointSortArrows = document.getElementsByClassName('name_header');
+  const insertPoint = document.getElementsByClassName('search_container');
 
   buttonsList.forEach(e => {
-    insertPointButtons[0].insertAdjacentHTML('afterbegin', e.html);
-  });
-
-  sortArrows.forEach(e => {
-    insertPointSortArrows[0].insertAdjacentHTML('beforeend', e.html);
+    insertPoint[0].insertAdjacentHTML('afterbegin', e.html);
   });
 }
 
@@ -384,7 +331,7 @@ function addEventListeners() {
     //get cleints  data event listner
     if (e.target.id == 'btn_show_all') {
       removeAllDataFromDom();
-      getClients('/get-clients?sort=name');
+      getClients('/get-clients?', 'sort=name');
     }
 
     //add new client event listener
@@ -397,7 +344,7 @@ function addEventListeners() {
       e.preventDefault();
 
       removeAllDataFromDom();
-      getClients('/get-clients?sort=name');
+      getClients(currentResults, 'sort=name');
     }
 
     //sort desceding
@@ -405,7 +352,7 @@ function addEventListeners() {
       e.preventDefault();
 
       removeAllDataFromDom();
-      getClients('/get-clients?sort=-name');
+      getClients(currentResults, 'sort=-name');
     }
 
     //search by name
@@ -417,16 +364,16 @@ function addEventListeners() {
     //edit record
     let editBtnRegEx = /edit_button.*/;
     if (e.target.id.match(editBtnRegEx)) {
-      let recordId = e.target.id.slice(12);
+      recordId = e.target.id.slice(12);
       renderEditClientForm(recordId);
     }
 
     //delete record
     let deleteBtnRegEx = /delete_button_.*/;
     if (e.target.id.match(deleteBtnRegEx)) {
-      let recordId = e.target.id.slice(14);
+      recordId = e.target.id.slice(14);
       e.preventDefault();
-      deleteRecord(recordId);
+      deleteRecord();
     }
   });
 
@@ -453,22 +400,12 @@ addEventListeners();
 
 async function nextPage() {
   let nextPage = currentPage + 1;
-  if (!nextPage || !currentSort) {
-    getClients('/get-clients?sort=name');
-    return;
-  }
-
   console.log('next page function', nextPage);
-  await getClients(`/get-Clients?page=${nextPage}&limit=8&sort=${currentSort}`);
+  await getClients(`/get-Clients?page=${nextPage}&limit=8`, currentSort);
 }
 
 async function prevPage() {
-  if (!nextPage || !currentSort) {
-    getClients('/get-clients?sort=name');
-    return;
-  }
-
   let prevPage = currentPage - 1;
   console.log('prev page function', prevPage);
-  await getClients(`/get-Clients?page=${prevPage}&limit=8&sort=${currentSort}`);
+  await getClients(`/get-Clients?page=${prevPage}&limit=8`, currentSort);
 }
