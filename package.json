@@ -22,5 +22,13 @@
     "validator": "^13.6.0"
   },
   "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattpowell2784/ab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mattpowell2784/ab/issues"
+  },
+  "homepage": "https://github.com/mattpowell2784/ab#readme",
   "description": ""
 }
