@@ -15,6 +15,12 @@ function addEventListeners() {
       login();
     }
 
+    //logout
+    if (e.target.id == 'btn_logout') {
+      e.preventDefault();
+      logout();
+    }
+
     //get cleints  data event listner
     if (e.target.id == 'btn_show_all') {
       removeAllDataFromDom();
@@ -479,4 +485,13 @@ async function prevPage() {
   let prevPage = currentPage - 1;
   console.log('prev page function', prevPage);
   await getClients(`/get-Clients?page=${prevPage}&limit=8&sort=${currentSort}`);
+}
+
+//---------------------------------------------------------------------
+
+async function logout() {
+  await fetch(`/logout`, {
+    method: 'GET',
+  });
+  window.location.href = '/';
 }

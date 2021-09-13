@@ -72,6 +72,11 @@ body {
   text-align: center;
 }
 
+.logout_btn {
+  float: right;
+  text-align: center;
+}
+
 .new_account_btn {
   background-color: #d60101;
   border: 2px solid #d60101;

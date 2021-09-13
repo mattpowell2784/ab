@@ -83,10 +83,22 @@ async function signUp() {
 
     if (signUpResult.status === 'success') {
       window.location.href = '/home';
+      return;
+    }
+
+    if (signUpResult.message.code) {
+      removeInputErrors();
+
+      let newForm = document.getElementsByClassName(`email_error`);
+      html = `<div class="errors">Email already exists!</div>`;
+      newForm[0].insertAdjacentHTML('afterbegin', html);
+
+      return;
     }
 
     if (signUpResult.status === 'fail') {
       renderSignUpInputError(signUpResult.message);
+      return;
     }
   } catch (error) {
     console.log(error);
@@ -97,6 +109,7 @@ async function signUp() {
 
 function renderSignUpInputError(errorMessage) {
   removeInputErrors();
+  console.log(errorMessage);
 
   let html = '';
   Object.values(errorMessage.errors).forEach(error => {

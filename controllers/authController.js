@@ -19,7 +19,11 @@ const signup = async (req, res, next) => {
 
     const token = signToken(newUser._id);
 
-    res.cookie('jwt', token, { httpOnly: true, maxAge: 100 * 60 * 60 });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 100 * 60 * 60,
+      secure: true,
+    });
 
     res.status(201).json({
       status: 'success',
@@ -62,7 +66,11 @@ const login = async (req, res, next) => {
     //if everythning ok, send token to cleint
     let token = signToken(user._id);
 
-    res.cookie('jwt', token, { httpOnly: true, maxAge: 100 * 60 * 60 });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60,
+      secure: true,
+    });
 
     res.status(200).json({
       status: 'success',
@@ -98,4 +106,11 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, login, protect };
+//---------------------------------------------------------------------
+
+const logout = async (req, res) => {
+  res.cookie('jwt', '', { maxAge: 1 });
+  res.redirect('/');
+};
+
+module.exports = { signup, login, protect, logout };
