@@ -18,6 +18,67 @@ body {
   color: #777;
 }
 
+.label {
+  float: left;
+  font-size: 1.5rem;
+}
+
+.middle {
+  position: absolute;
+  width: 100vw;
+  top: 0;
+}
+
+.middle_container {
+  box-sizing: initial;
+  position: relative;
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: none;
+}
+
+.login {
+  display: block;
+  border-style: solid;
+  border-color: #cc3333;
+  border-radius: 10px;
+
+  margin: auto;
+  margin-top: 5rem;
+  text-align: center;
+  width: 30rem;
+  min-width: 30rem;
+
+  padding: 10px;
+  font-size: 1.5rem;
+  background-color: none;
+}
+
+.login_input {
+  width: 95%;
+  font-size: 1.5rem;
+}
+
+.login_h2 {
+  font-size: 3rem;
+  color: #cc3333;
+}
+
+.login_btn {
+  float: none;
+  text-align: center;
+}
+
+.new_account_btn {
+  background-color: #d60101;
+  border: 2px solid #d60101;
+  float: none;
+  text-align: center;
+}
+
 .top {
   position: absolute;
   width: 100vw;
@@ -37,13 +98,6 @@ body {
 .logo {
   display: inline-block;
   padding: 1rem;
-}
-
-.tel {
-  font-family: 'Titillium Web', sans-serif;
-  font-size: 3rem;
-  padding-left: 2rem;
-  color: white;
 }
 
 .topnav {
@@ -122,6 +176,14 @@ New client form
 
 button {
   float: right;
+}
+
+button {
+  float: right;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .edit_client_form__name,

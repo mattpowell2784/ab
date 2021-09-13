@@ -6,6 +6,84 @@ let currentResults = '/get-clients?';
 
 //---------------------------------------------------------------------
 
+//event listeners
+function addEventListeners() {
+  document.addEventListener('click', function (e) {
+    //login
+    if (e.target.id == 'login_btn') {
+      e.preventDefault();
+      login();
+    }
+
+    //get cleints  data event listner
+    if (e.target.id == 'btn_show_all') {
+      removeAllDataFromDom();
+      getClients('/get-clients?sort=name');
+    }
+
+    //add new client event listener
+    if (e.target.id == 'btn_add_client') {
+      renderNewClientForm();
+    }
+
+    //sort ascending
+    if (e.target.id == 'material_icons_north') {
+      e.preventDefault();
+
+      removeAllDataFromDom();
+      getClients('/get-clients?sort=name');
+    }
+
+    //sort desceding
+    if (e.target.id == 'material_icons_south') {
+      e.preventDefault();
+
+      removeAllDataFromDom();
+      getClients('/get-clients?sort=-name');
+    }
+
+    //search by name
+    if (e.target.className == 'search_btn') {
+      e.preventDefault();
+      searchByName();
+    }
+
+    //edit record
+    let editBtnRegEx = /edit_button.*/;
+    if (e.target.id.match(editBtnRegEx)) {
+      let recordId = e.target.id.slice(12);
+      renderEditClientForm(recordId);
+    }
+
+    //delete record
+    let deleteBtnRegEx = /delete_button_.*/;
+    if (e.target.id.match(deleteBtnRegEx)) {
+      let recordId = e.target.id.slice(14);
+      e.preventDefault();
+      deleteRecord(recordId);
+    }
+  });
+
+  //next page
+  document.addEventListener('click', function (e) {
+    if (e.target.className == 'btn_next_page') {
+      e.preventDefault();
+      nextPage();
+    }
+  });
+
+  //prev page
+  document.addEventListener('click', function (e) {
+    if (e.target.className == 'btn_prev_page') {
+      e.preventDefault();
+      prevPage();
+    }
+  });
+}
+addEventListeners();
+
+//---------------------------------------------------------------------
+
 async function getClients(fetchRoute) {
   try {
     console.log('fetch route', fetchRoute);
@@ -378,77 +456,7 @@ async function searchByName(e) {
 }
 
 //---------------------------------------------------------------------
-//event listeners
-function addEventListeners() {
-  document.addEventListener('click', function (e) {
-    //get cleints  data event listner
-    if (e.target.id == 'btn_show_all') {
-      removeAllDataFromDom();
-      getClients('/get-clients?sort=name');
-    }
 
-    //add new client event listener
-    if (e.target.id == 'btn_add_client') {
-      renderNewClientForm();
-    }
-
-    //sort ascending
-    if (e.target.id == 'material_icons_north') {
-      e.preventDefault();
-
-      removeAllDataFromDom();
-      getClients('/get-clients?sort=name');
-    }
-
-    //sort desceding
-    if (e.target.id == 'material_icons_south') {
-      e.preventDefault();
-
-      removeAllDataFromDom();
-      getClients('/get-clients?sort=-name');
-    }
-
-    //search by name
-    if (e.target.className == 'search_btn') {
-      e.preventDefault();
-      searchByName();
-    }
-
-    //edit record
-    let editBtnRegEx = /edit_button.*/;
-    if (e.target.id.match(editBtnRegEx)) {
-      let recordId = e.target.id.slice(12);
-      renderEditClientForm(recordId);
-    }
-
-    //delete record
-    let deleteBtnRegEx = /delete_button_.*/;
-    if (e.target.id.match(deleteBtnRegEx)) {
-      let recordId = e.target.id.slice(14);
-      e.preventDefault();
-      deleteRecord(recordId);
-    }
-  });
-
-  //next page
-  document.addEventListener('click', function (e) {
-    if (e.target.className == 'btn_next_page') {
-      e.preventDefault();
-      nextPage();
-    }
-  });
-
-  //prev page
-  document.addEventListener('click', function (e) {
-    if (e.target.className == 'btn_prev_page') {
-      e.preventDefault();
-      prevPage();
-    }
-  });
-}
-addEventListeners();
-
-//---------------------------------------------------------------------
 //pagination
 
 async function nextPage() {

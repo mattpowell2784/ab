@@ -31,6 +31,6 @@ git add -A (add files to git)
 git commit -m 'anyname'
 heroku git:remote -a NAME_OF_APPLICATION
 git push heroku master
-git pust origin master
+git push origin master
 
 git pull

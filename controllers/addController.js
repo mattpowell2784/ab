@@ -1,22 +1,29 @@
-const ClientsModel = require('../models/clients');
+const ClientsModel = require('../models/clientsModel');
 
 //get all clients
-getAllCleints = async (req, res) => {
-  let query = ClientsModel.find();
+const getAllCleints = async (req, res) => {
+  try {
+    let query = ClientsModel.find();
 
-  //execute query
-  let data = await query;
-  res.status(200).json({
-    status: 'success',
-    results: data.length,
-    data: { data },
-  });
+    //execute query
+    let data = await query;
+    res.status(200).json({
+      status: 'success',
+      results: data.length,
+      data: { data },
+    });
+  } catch {
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
 //---------------------------------------------------------------------
 
 //display clients
-displayClients = async (req, res) => {
+const displayClients = async (req, res) => {
   try {
     //build query
     const queryObj = { ...req.query };

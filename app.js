@@ -2,8 +2,10 @@ const express = require('express');
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const routes = require('./routes/routes.js');
+const addRoutes = require('./routes/addRoutes.js');
+const userRoutes = require('./routes/userRoutes.js');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 
 //read config.env file
 dotenv.config({ path: './config.env' });
@@ -24,6 +26,9 @@ app.use(express.static('public'));
 
 // For reading data from external source
 app.use(express.json());
+
+//cookie parser
+app.use(cookieParser());
 
 // logging using morgan middleware
 app.use(morgan('dev'));
@@ -53,10 +58,19 @@ app.listen(port, () => {
 //---------------------------------------------------------------------
 
 //routes
-app.use(routes);
+app.use(addRoutes);
+app.use(userRoutes);
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('login');
+});
+
+app.get('/home', (req, res) => {
+  res.render('home');
+});
+
+app.get('/signup', (req, res) => {
+  res.render('signup');
 });
 
 app.use((req, res) => {
