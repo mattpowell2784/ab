@@ -1,9 +1,6 @@
 {
   "name": "max-volts",
   "version": "1.0.0",
-  "engines": {
-    "node": "14.x"
-  },
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
@@ -11,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
@@ -25,13 +22,5 @@
     "validator": "^13.6.0"
   },
   "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mattpowell2784/ab.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mattpowell2784/ab/issues"
-  },
-  "homepage": "https://github.com/mattpowell2784/ab#readme",
   "description": ""
 }
