@@ -22,7 +22,7 @@ const signup = async (req, res, next) => {
     res.cookie('jwt', token, {
       httpOnly: true,
       maxAge: 100 * 60 * 60,
-      secure: true,
+      //secure: true,
     });
 
     res.status(201).json({
@@ -69,7 +69,7 @@ const login = async (req, res, next) => {
     res.cookie('jwt', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
-      secure: true,
+      //secure: true,
     });
 
     res.status(200).json({

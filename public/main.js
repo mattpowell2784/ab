@@ -21,7 +21,7 @@ function addEventListeners() {
       logout();
     }
 
-    //get cleints  data event listner
+    //get cleints data
     if (e.target.id == 'btn_show_all') {
       removeAllDataFromDom();
       getClients('/get-clients?sort=name');
@@ -30,6 +30,17 @@ function addEventListeners() {
     //add new client event listener
     if (e.target.id == 'btn_add_client') {
       renderNewClientForm();
+    }
+
+    //cancel button
+    if (
+      e.target.className == 'new_client_form__btn_cancel' ||
+      e.target.className == 'edit_client_form__btn_cancel'
+    ) {
+      e.preventDefault();
+      removeAllDataFromDom();
+      getClients('/get-clients?sort=name');
+      addButtons();
     }
 
     //sort ascending
