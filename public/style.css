@@ -78,8 +78,8 @@ body {
 }
 
 .new_account_btn {
-  background-color: #d60101;
-  border: 2px solid #d60101;
+  color: red;
+  text-decoration: underline;
   float: none;
   text-align: center;
 }
